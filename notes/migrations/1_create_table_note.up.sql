@@ -1,0 +1,6 @@
+CREATE TABLE notes (
+    id BIGSERIAL PRIMARY KEY,
+    author TEXT NOT NULL,
+    msg TEXT NOT NULL,
+    created TIMESTAMP WITH TIME ZONE NOT NULL
+);

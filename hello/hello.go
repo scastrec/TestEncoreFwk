@@ -4,18 +4,6 @@ import (
 	"context"
 )
 
-// Welcome to Encore!
-// This is a simple "Hello World" project to get you started.
-//
-// To run it, execute "encore run" in your favorite shell.
-
-// ==================================================================
-
-// This is a simple REST API that responds with a personalized greeting.
-// To call it, run in your terminal:
-//
-//     curl http://localhost:4060/hello/World
-//
 //encore:api public path=/hello/:name
 func World(ctx context.Context, name string) (*Response, error) {
 	msg := "Hello, " + name + "!"

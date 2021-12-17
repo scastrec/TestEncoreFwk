@@ -1,0 +1,4 @@
+encore.dev v0.17.1 h1:CBF0CBfaiwSX0OQxUs9I3Wya7NpfIckT4OfJlPn1L+s=
+encore.dev v0.17.1/go.mod h1:eKOQ6G72uYiV0DbDJam6BB07KsIfvpqT3cQfadCShao=
+github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
+github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
