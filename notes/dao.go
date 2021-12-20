@@ -20,7 +20,7 @@ func addToDB(ctx context.Context, note *Note) (*Note, error) {
 	fmt.Println("Note created note: %v", note.ID)
 	return note, nil
 }
-func GetNotesFromDB(ctx context.Context) ([]*Note, error) {
+func getNotesFromDB(ctx context.Context) ([]*Note, error) {
 	rows, err := sqldb.Query(ctx, `
 	SELECT id, author, msg, created
 	FROM notes
