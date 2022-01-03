@@ -1,4 +1,4 @@
-module encore.app
+module encore.app/mynotes
 
 go 1.15
 

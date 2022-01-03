@@ -9,10 +9,10 @@ import (
 
 func addToDB(ctx context.Context, note *Note) (*Note, error) {
 	err := sqldb.QueryRow(ctx, `
-		INSERT INTO notes (author, msg, created)
-		VALUES ($1, $2, $3)
+		INSERT INTO notes (authorId, author, msg, created)
+		VALUES ($1, $2, $3, $4)
 		RETURNING id
-	`, note.Author, note.Message, note.Created).Scan(&note.ID)
+	`, note.AuthorID, note.Author, note.Message, note.Created).Scan(&note.ID)
 	if err != nil {
 		fmt.Errorf("could not create note: %v", err)
 		return nil, err
@@ -22,7 +22,7 @@ func addToDB(ctx context.Context, note *Note) (*Note, error) {
 }
 func getNotesFromDB(ctx context.Context) ([]*Note, error) {
 	rows, err := sqldb.Query(ctx, `
-	SELECT id, author, msg, created
+	SELECT id, authorId, author, msg, created
 	FROM notes
 	ORDER BY created DESC
 	`)
@@ -34,7 +34,7 @@ func getNotesFromDB(ctx context.Context) ([]*Note, error) {
 	notes := []*Note{}
 	for rows.Next() {
 		var b Note
-		if err := rows.Scan(&b.ID, &b.Author, &b.Message, &b.Created); err != nil {
+		if err := rows.Scan(&b.ID, &b.AuthorID, &b.Author, &b.Message, &b.Created); err != nil {
 			fmt.Errorf("could not scan: %v", err)
 			return nil, err
 		}

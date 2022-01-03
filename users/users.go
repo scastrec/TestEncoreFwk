@@ -3,6 +3,8 @@ package users
 import (
 	"context"
 	"time"
+	"errors"
+	"fmt"
 )
 
 type CreateUserParams struct {
@@ -52,8 +54,12 @@ func GetUsers(ctx context.Context) (*ListUsers, error) {
 	return &ListUsers{Users: users}, err
 }
 
-//encore:api public method=POST path=/jwt
+//encore:api private method=POST path=/jwt
 func ValidateJwtToken(ctx context.Context, token *Token) (*User, error) {
+	fmt.Println("ValidateJwtToken ", token.Token)
+	if len(token.Token) == 0 {
+		return nil, errors.New("No token as param")
+	}
 	user, err := validateJwt(token.Token)
 	return user, err
 }
@@ -69,6 +75,6 @@ func AuthenticateUser(ctx context.Context, params *CreateTokenParams) (*Token, e
 	if err != nil {
 		return nil, err
 	}
-	tokenString, erro := fenerateJwt(user)
+	tokenString, erro := generateJwt(user)
 	return &Token{Token: tokenString}, erro
 }

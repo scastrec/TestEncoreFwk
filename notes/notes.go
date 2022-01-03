@@ -4,21 +4,22 @@ import (
 	"context"
 	"time"
 	"fmt"
+	"strconv"
 	"encore.dev/beta/errs"
 	"encore.dev/beta/auth"
 	// import service
-	"app.encore.dev/hello-encore-fwk-nuii/users" 
+	"encore.app/mynotes/users" 
 )
 
 /** JSON To add note */
 type AddNoteParams struct {
 	Message string
-	Author string
 }
 
 /** Note structure */
 type Note struct {
 	ID int64
+	AuthorID int64
 	Message string
 	Author string
 	Created time.Time
@@ -29,30 +30,31 @@ type ListNotes struct {
 	Notes []*Note
 }
 
-type User struct {
-	ID int64
-	Username string
-	Created time.Time
-}
 
 //encore:authhandler
-func AuthHandler(ctx context.Context, token string) (auth.UID, *User, error) {
+func AuthHandler(ctx context.Context, token string) (auth.UID, *users.User, error) {
     // In real project, I would validate JSON in each Microservices
 	// Here I want to test microservices private api
+	fmt.Println("AuthHandler ", token)
 	user, err := users.ValidateJwtToken(ctx, &users.Token{Token: token})
+	fmt.Println("AuthHandler")
 	if err != nil {
-		return nil, &errs.Error{
+		fmt.Println("AuthHandler - token invalid", err)
+		return "", nil, &errs.Error{
 			Code: errs.Unauthenticated,
 			Message: "invalid token",
 		}
 	}
-	return user, nil
+	// fix me return a real UUID
+	return auth.UID(strconv.FormatInt(user.ID, 10)), user, nil
 }
 
 //encore:api auth method=POST path=/notes
 func AddNote(ctx context.Context, params *AddNoteParams) (*Note, error) {
-	u := auth.Data()
+	u := auth.Data().(*users.User)
+	fmt.Println("addNote username", u.Username)
 	c := &Note{
+		AuthorID:    u.ID,
 		Author:      u.Username,
 		Message:     params.Message,
 		Created:     time.Now(),
